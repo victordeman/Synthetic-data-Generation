@@ -1,0 +1,39 @@
+Task-ID,TaskName,AnswerQuery
+489,Creation of Table STUDENTS,"create table students( student_id int not null, firstname varchar(20) not null, lastname varchar(20) not null, study_course varchar(50), primary key(student_id));"
+490,Creation of Table KNEIPE,"create table restaurant( name varchar(40) not null, owner varchar(40), zip int, city varchar(40), street varchar(40), primary key(name));"
+488,Table STUDENT_RESTAURANT,"create table STUDENT_RESTAURANT( student_id int not null, name varchar(20) not null, primary key (student_id, name), foreign key (student_id) references STUDENTS(student_id), foreign key (name) references RESTAURANT(name));"
+491,Extend STUDENT table,alter table students add age int;
+493,Creation of table PRODUCER,"create table producer( vineyard varchar(200), area varchar(30)not null unique, region varchar(30), primary key(vineyard));"
+492,Creation of table WINE,"create table wine( name varchar(50) default '', color char(20) default 'red', year char, vineyard varchar(20), primary key(name), foreign key(vineyard) references producer(vineyard));"
+494,Creation of table LICENSE,"create table license( vineyard varchar(20) default '', licenseno int not null, quantity int, primary key(vineyard, licenseno), foreign key(vineyard) references producer(vineyard));"
+495,Creation of table MADE_OF,"create table made_of( wname varchar(255) not null default '', gname varchar(255) not null default '', amount decimal, primary key (wname, gname), foreign key (wname) references wine(name), foreign key (gname) references grape(name));"
+487,Creation of Table Player,"create table player( name varchar(30), firstname varchar(30), birthdate date, playerno varchar(2), position varchar(10), primary key (name, firstname, birthdate));"
+482,Insertions to Producer,"insert into producer(vineyard, area, region) values ('johannishof','rheingau','hessen');"
+483,Insertions to Wine,"insert into wine( name,year,vineyard) select 'merlot', 2009,producer.vineyard from producer where region='south australia';"
+484,Changing red wines,update wine set year = year +1 where color ='red';
+485,Empty table Wine,delete from wine;
+486,Delete Table Producer,drop table producer;
+464,Well paid employees,"select name, salary from employee where salary > 6450;"
+465,Employees with high or low salary,"select name, salary from employee where salary < 6000 or salary > 10000;"
+466,Planes by type,"select* from plane where type = ""a-340"" or type=""trident "" order by purchase_date;"
+467,Qualified pilots,select * from pilot where not license='i' and not license='ii';
+468,Employees with A,select name from employee where name like '__a%';
+469,Employees with two Ls,select name from employee where name like '%l%l%';
+470,Engineers or Steward/-ess,"select name, job, salary from employee where(job='dipl.-ing.' or job='steward' or job='stewardesse') and salary >= 6000;"
+471,New Salary for Employees,"select id, name, salary, round(salary * 1.15, 0) as new_salary from employee;"
+472,New salary and difference,"select id, name, salary, round(salary*1.15,0) as new_salary, round(salary*0.15,0) as difference from employee;"
+473,Operating hours of planes,"select type, serial_number, timestampdiff(hour, purchase_date, now()) as operating_hours from plane order by operating_hours asc; "
+474,Dream salary,"select concat(name, concat(' earns ', concat(salary, concat(' per month, but wants to have ',salary*3)))) as dream_salary from employee;"
+475,Plane types,"select concat(upper(left(type,1)),lower(substring(type,2,length(type)))) as name, length(type) as length from Plane;"
+476,Number of Planes,"select count(distinct serial_number,type) as amount from departure;"
+477,Number of PhDs (Dr.),select count(name) as amount from employee where name like '%dr.%';
+478,Average salary,"select job, avg(all salary) as average_salary from employee group by job;"
+479,Travels in 2008,"select sum(price) as sum_prices, count(passenger_id) as amount_passengers from booking where flight_date like '%2008%'"
+480,Minimal salary by jobs,"select job,min(salary) as min_salary from employee group by job;"
+481,Salary difference,select max(salary)-min(salary) as difference from employee;
+454,Name Customers,select name from customer;
+455,Meier's Orders,"select orders.* from customer, orders where name='a. meier' and orders.cid=customer.cid;"
+456,Bad Sellers,select * from product where pid not in( select pid from orders natural join line_item where date='13.05.2003');
+457,All products delivered to Schulze by Meier ,"select product.pid, product.label from orders, customer, line_item, product, dealer where customer.name='i. schulze' and customer.cid=orders.cid and orders.did=dealer.did and dealer.name='e. meier' and orders.oid=line_item.oid and line_item.pid=product.pid;"
+458,1(e).1 Products Schmidt/Schulze,"select label from product, dealer, line_item, orders where dealer.name='p. schmidt' and orders.did=dealer.did and line_item.oid=orders.oid and product.pid=line_item.pid union select label from product, customer, line_item, orders where customer.name='i. schulze' and customer.cid=orders.cid and line_item.oid=orders.oid and product.pid=line_item.pid;"
+459,1(e).2 Products Meier /Schulze,"select label from product, dealer, orders b1, line_item a1, orders b2, line_item a2, customer where dealer.name='p. schmidt' and b1.did=dealer.did and b2.oid=a1.oid and product.pid=a1.pid and customer.name='i. schulze' and customer.cid=b2.cid and b2.pid=a2.pid and a2.pid=a1.pid and a2.pid=product.pid;"
